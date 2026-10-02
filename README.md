@@ -131,7 +131,7 @@ expense-tracker/
    * **Cổng chính ứng dụng (Web App & API qua Nginx):** `http://localhost`
    * **Swagger API Documentation:** `http://localhost/api/docs`
    * **pgAdmin (Quản trị CSDL):** `http://localhost:5050`
-     * Email: `admin@fintrack.local`
+     * Email: `admin@fintrack.com`
      * Password: `Admin123456!`
    * **Grafana (Monitoring & Dashboards):** `http://localhost:3001`
      * User: `admin`
