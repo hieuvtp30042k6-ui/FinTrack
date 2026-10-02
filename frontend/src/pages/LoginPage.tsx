@@ -85,18 +85,31 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
         {/* Feedback Alert */}
         {(error || alertMessage) && (
-          <div className="mb-5 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:rose-300 text-xs flex items-center gap-2.5 animate-in fade-in">
-            <span className="material-symbols-outlined text-lg shrink-0">
-              {alertMessage && !error ? "lock" : "error"}
-            </span>
-            <span className="font-medium">{error || alertMessage}</span>
+          <div className="mb-5 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:rose-300 text-xs flex items-center justify-between gap-2.5 animate-in fade-in">
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-lg shrink-0">
+                {alertMessage && !error ? "lock" : "error"}
+              </span>
+              <span className="font-medium">{error || alertMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setError(null)}
+              className="p-1 hover:bg-rose-100 dark:hover:bg-rose-900/60 rounded-md transition-colors text-rose-600 dark:text-rose-400 cursor-pointer"
+              title="Đóng thông báo"
+            >
+              <span className="material-symbols-outlined text-base leading-none">close</span>
+            </button>
           </div>
         )}
 
         {/* Google SSO Action */}
         <button
           type="button"
-          onClick={() => setError(t("auth.google_notice", "Vui lòng cấu hình Google Client ID trên môi trường thực tế."))}
+          onClick={() => {
+            setError(t("auth.google_notice", "Vui lòng cấu hình Google Client ID trên môi trường thực tế."));
+            setTimeout(() => setError(null), 4000);
+          }}
           className="w-full h-11 flex items-center justify-center gap-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors duration-150 shadow-sm cursor-pointer group"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -143,7 +156,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               autoComplete="email"
               required
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) => {
+                setError(null);
+                setFormData({ ...formData, email: e.target.value });
+              }}
               placeholder={t("auth.email_placeholder", "name@example.com")}
               className="w-full h-11 px-3.5 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-slate-900 dark:focus:border-emerald-500 focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 transition-all"
             />
@@ -170,7 +186,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 autoComplete="current-password"
                 required
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) => {
+                  setError(null);
+                  setFormData({ ...formData, password: e.target.value });
+                }}
                 placeholder={t("auth.password_placeholder", "••••••••")}
                 className="w-full h-11 pl-3.5 pr-11 rounded-lg bg-white dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none focus:border-slate-900 dark:focus:border-emerald-500 focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 transition-all"
               />
@@ -210,42 +229,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <span>{loading ? t("auth.signing_in", "Đang đăng nhập...") : t("auth.sign_in_btn", "Đăng nhập")}</span>
             <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
           </button>
-
-          {/* Quick Demo Accounts for 3 Distinct Roles */}
-          <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800">
-            <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 text-center">
-              {t("auth.demo_accounts", "Chọn nhanh tài khoản trải nghiệm (Demo)")}
-            </p>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => setFormData({ email: "superadmin@fintrack.internal", password: "Password@123" })}
-                className="p-2 rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/70 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-amber-900 dark:text-amber-300 text-xs font-semibold flex flex-col items-center gap-1 transition-all cursor-pointer shadow-2xs"
-                title="Super Admin - Toàn quyền cấu hình, sao lưu & phân quyền"
-              >
-                <span className="material-symbols-outlined text-[18px] text-amber-600 dark:text-amber-400">shield</span>
-                <span className="text-[11px] font-bold">Super Admin</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData({ email: "admin@fintrack.internal", password: "Password@123" })}
-                className="p-2 rounded-xl border border-purple-200 dark:border-purple-800/60 bg-purple-50/70 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/50 text-purple-900 dark:text-purple-300 text-xs font-semibold flex flex-col items-center gap-1 transition-all cursor-pointer shadow-2xs"
-                title="Admin - Quản trị người dùng, danh mục & thông báo"
-              >
-                <span className="material-symbols-outlined text-[18px] text-purple-600 dark:text-purple-400">admin_panel_settings</span>
-                <span className="text-[11px] font-bold">Admin</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData({ email: "vana.nguyen@example.com", password: "Password@123" })}
-                className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold flex flex-col items-center gap-1 transition-all cursor-pointer shadow-2xs"
-                title="User - Quản lý tài chính cá nhân"
-              >
-                <span className="material-symbols-outlined text-[18px] text-slate-600 dark:text-slate-400">person</span>
-                <span className="text-[11px] font-bold">User</span>
-              </button>
-            </div>
-          </div>
         </form>
 
         {/* Trust & Security Sub-Footer */}
