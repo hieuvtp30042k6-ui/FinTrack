@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import { RegisterRequest } from "../types/auth";
-import { registerApi } from "../services/api";
+import React, { useState, useEffect, useRef } from "react";
+import { RegisterRequest, User } from "../types/auth";
+import { registerApi, googleAuthApi, getAuthConfigApi } from "../services/api";
+import { setToken, setUser } from "../utils/storage";
 import { useTranslation } from "../utils/i18n";
 
 interface RegisterPageProps {
   onSwitchToLogin: () => void;
   onRegisterSuccess: (email: string) => void;
+  onLoginSuccess?: (user: User) => void;
 }
 
 export const RegisterPage: React.FC<RegisterPageProps> = ({
   onSwitchToLogin,
   onRegisterSuccess,
+  onLoginSuccess,
 }) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -26,6 +29,81 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [googleClientId, setGoogleClientId] = useState<string>("");
+  const googleBtnRef = useRef<HTMLDivElement>(null);
+
+  const handleGoogleSuccess = async (credential: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await googleAuthApi(credential);
+      setToken(response.access_token, true);
+      setUser(response.user, true);
+      if (onLoginSuccess) {
+        onLoginSuccess(response.user);
+      } else {
+        onSwitchToLogin();
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Đăng ký / đăng nhập bằng Google không thành công.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAuthConfigApi().then((cfg) => {
+      if (cfg?.google_client_id) {
+        setGoogleClientId(cfg.google_client_id);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!googleClientId) return;
+
+    const renderGsiButton = () => {
+      if (window.google?.accounts?.id && googleBtnRef.current) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: (res: any) => {
+              if (res?.credential) {
+                handleGoogleSuccess(res.credential);
+              }
+            },
+          });
+          googleBtnRef.current.innerHTML = "";
+          window.google.accounts.id.renderButton(googleBtnRef.current, {
+            theme: "outline",
+            size: "large",
+            width: 380,
+            text: "signup_with",
+            shape: "rectangular",
+            logo_alignment: "left",
+          });
+        } catch (e) {
+          console.error("GSI render error:", e);
+        }
+      }
+    };
+
+    if (window.google?.accounts?.id) {
+      renderGsiButton();
+    } else {
+      const timer = setInterval(() => {
+        if (window.google?.accounts?.id) {
+          clearInterval(timer);
+          renderGsiButton();
+        }
+      }, 300);
+      return () => clearInterval(timer);
+    }
+  }, [googleClientId]);
 
   // Dynamic Password Strength Calculation
   const getPasswordStrength = (pwd: string) => {
@@ -127,31 +205,45 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
         )}
 
         {/* Google SSO Button */}
-        <button
-          type="button"
-          onClick={() => setError(t("auth.google_notice", "Vui lòng cấu hình Google Client ID trên môi trường thực tế."))}
-          className="w-full h-11 flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition-colors shadow-xs active:scale-[0.99] cursor-pointer"
-        >
-          <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-            <path
-              d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.04h3.88c2.27-2.09 3.66-5.17 3.66-9.14z"
-              fill="#4285F4"
-            />
-            <path
-              d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.04c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.27 21.43 7.35 24 12 24z"
-              fill="#34A853"
-            />
-            <path
-              d="M5.28 14.28c-.25-.72-.38-1.49-.38-2.28s.13-1.56.38-2.28V6.59H1.25C.45 8.19 0 9.99 0 12s.45 3.81 1.25 5.41l4.03-3.13z"
-              fill="#FBBC05"
-            />
-            <path
-              d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.27 2.57 1.25 6.59l4.03 3.13c.95-2.83 3.6-4.93 6.72-4.93z"
-              fill="#EA4335"
-            />
-          </svg>
-          <span>{t("auth.google_login", "Đăng ký với Google")}</span>
-        </button>
+        {googleClientId ? (
+          <div className="w-full flex justify-center min-h-[44px]">
+            <div ref={googleBtnRef} className="w-full flex justify-center" />
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setError(
+                t(
+                  "auth.google_notice",
+                  "Chưa cấu hình GOOGLE_CLIENT_ID trong file .env. Vui lòng thiết lập để đăng ký bằng tài khoản Google."
+                )
+              );
+              setTimeout(() => setError(null), 5000);
+            }}
+            className="w-full h-11 flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium transition-colors shadow-xs active:scale-[0.99] cursor-pointer"
+          >
+            <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              <path
+                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.04h3.88c2.27-2.09 3.66-5.17 3.66-9.14z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.04c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.27 21.43 7.35 24 12 24z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.28 14.28c-.25-.72-.38-1.49-.38-2.28s.13-1.56.38-2.28V6.59H1.25C.45 8.19 0 9.99 0 12s.45 3.81 1.25 5.41l4.03-3.13z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.27 2.57 1.25 6.59l4.03 3.13c.95-2.83 3.6-4.93 6.72-4.93z"
+                fill="#EA4335"
+              />
+            </svg>
+            <span>{t("auth.google_login", "Đăng ký với Google")}</span>
+          </button>
+        )}
 
         {/* Divider */}
         <div className="relative my-7 flex items-center justify-center">

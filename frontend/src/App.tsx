@@ -190,6 +190,7 @@ export const App: React.FC = () => {
           <RegisterPage
             onSwitchToLogin={() => setAuthView("login")}
             onRegisterSuccess={handleRegisterSuccess}
+            onLoginSuccess={handleLoginSuccess}
           />
         )}
 

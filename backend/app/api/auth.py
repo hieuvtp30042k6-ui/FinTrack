@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
+from app.core.config import settings
 from app.schemas.auth import (
     EmailRegisterRequest,
     EmailLoginRequest,
@@ -16,6 +17,17 @@ from app.schemas.auth import (
 from app.services.auth_service import auth_service
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+
+
+@router.get(
+    "/config",
+    summary="Lấy cấu hình xác thực công khai"
+)
+def get_auth_config():
+    """Trả về cấu hình client công khai như Google Client ID."""
+    return {
+        "google_client_id": settings.GOOGLE_CLIENT_ID or ""
+    }
 
 
 @router.post(

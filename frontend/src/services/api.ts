@@ -65,6 +65,22 @@ export const googleAuthApi = async (credential: string): Promise<AuthResponse> =
   return handleResponse<AuthResponse>(res);
 };
 
+export interface AuthConfig {
+  google_client_id: string;
+}
+
+export const getAuthConfigApi = async (): Promise<AuthConfig> => {
+  try {
+    const res = await fetch(`${API_BASE}/auth/config`);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.error("Failed to fetch auth config:", err);
+  }
+  return { google_client_id: "" };
+};
+
 export const getMyProfileApi = async (): Promise<User> => {
   const token = getToken();
   const res = await fetch(`${API_BASE}/users/me`, {
