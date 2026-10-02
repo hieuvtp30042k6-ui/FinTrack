@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "FinTrack Database (PostgreSQL 16)",
+      "Group": "Servers",
+      "Host": "database",
+      "Port": 5432,
+      "MaintenanceDB": "expense_tracker",
+      "Username": "postgres",
+      "SSLMode": "prefer"
+    }
+  }
+}
