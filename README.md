@@ -74,6 +74,8 @@ expense-tracker/
 │   └── tsconfig.json
 │
 ├── backend/                      # Mã nguồn Máy chủ Backend
+│   ├── alembic/                  # Quản lý phiên bản CSDL (Alembic Migrations)
+│   │   └── versions/             # Lịch sử các bước di chuyển schema CSDL
 │   ├── app/
 │   │   ├── api/                  # Tầng định tuyến API Endpoint
 │   │   ├── models/               # SQLAlchemy ORM Models
@@ -86,10 +88,10 @@ expense-tracker/
 │   ├── Dockerfile
 │   └── requirements.txt          # Danh sách thư viện Python
 │
-├── database/                     # Cấu trúc CSDL và Dữ liệu khởi tạo
-│   ├── init.sql                  # Toàn bộ DDL khởi tạo schema
+├── database/                     # Cấu trúc CSDL và Dữ liệu khởi tạo (PostgreSQL)
+│   ├── init.sql                  # Toàn bộ DDL khởi tạo schema chuẩn đồng bộ Alembic
 │   ├── seed.sql                  # Dữ liệu mẫu khởi tạo chuẩn
-│   └── migrations/               # Thư mục lưu lịch sử migration
+│   └── servers.json              # Cấu hình tự động kết nối pgAdmin
 │
 ├── nginx/                        # Cấu hình Cổng vào Reverse Proxy
 │   └── nginx.conf

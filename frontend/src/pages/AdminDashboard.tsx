@@ -15,17 +15,24 @@ import { AdminUsersView } from "./admin/AdminUsersView";
 import { AdminContentView } from "./admin/AdminContentView";
 import { useTranslation } from "../utils/i18n";
 import { ThemeAndLanguageBar } from "../components/ThemeAndLanguageBar";
+import { setUser as setStorageUser } from "../utils/storage";
 
 interface AdminDashboardProps {
   user: User;
   onLogout: () => void;
+  onUserUpdate?: (user: User) => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   user: initialUser,
   onLogout,
+  onUserUpdate,
 }) => {
   const [user, setUser] = useState<User>(initialUser);
+
+  useEffect(() => {
+    setUser(initialUser);
+  }, [initialUser]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [stats, setStats] = useState<AdminDashboardStatsResponse | null>(null);
   const [loadingStats, setLoadingStats] = useState<boolean>(false);
@@ -360,7 +367,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           ) : activeTab === "security" ? (
             <AdminSecurityView />
           ) : activeTab === "account" ? (
-            <AdminAccountView user={user} onUserUpdated={(updated) => setUser(updated)} />
+            <AdminAccountView
+              user={user}
+              onUserUpdated={(updated) => {
+                setUser(updated);
+                setStorageUser(updated);
+                onUserUpdate?.(updated);
+              }}
+            />
           ) : (
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-8 sm:p-12 text-center space-y-4">
               <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mx-auto">

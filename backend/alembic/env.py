@@ -23,8 +23,9 @@ if config.config_file_name is not None:
     except Exception:
         pass
 
-# Overwrite sqlalchemy.url with application settings
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# Overwrite sqlalchemy.url with application settings if not already provided
+if not config.get_main_option("sqlalchemy.url"):
+    config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 target_metadata = Base.metadata
 
@@ -47,10 +48,13 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
     configuration = config.get_section(config.config_ini_section, {})
-    configuration["sqlalchemy.url"] = settings.DATABASE_URL
+    db_url = config.get_main_option("sqlalchemy.url") or settings.DATABASE_URL
+    if db_url.startswith("postgresql://"):
+        db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    configuration["sqlalchemy.url"] = db_url
 
     connect_args = {}
-    if settings.DATABASE_URL.startswith("sqlite"):
+    if db_url.startswith("sqlite"):
         connect_args["check_same_thread"] = False
 
     connectable = engine_from_config(

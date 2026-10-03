@@ -28,9 +28,12 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Alembic
+# Alembic & Database files
 *.db-shm
 *.db-wal
+*.db
+*.sqlite
+*.sqlite3
 
 # Logs
 *.log
@@ -48,4 +51,10 @@ uploads/*
 !uploads/avatars/.gitkeep
 !uploads/receipts/
 !uploads/receipts/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/avatars/
+!backend/uploads/avatars/.gitkeep
+!backend/uploads/receipts/
+!backend/uploads/receipts/.gitkeep
 

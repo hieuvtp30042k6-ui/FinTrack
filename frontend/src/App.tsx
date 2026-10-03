@@ -24,6 +24,15 @@ export const App: React.FC = () => {
     const user = getUser();
     if (user) {
       setCurrentUser(user);
+      // F01: Luôn đồng bộ hồ sơ mới nhất từ CSDL (avatar, tên, thông tin tài khoản)
+      getMyProfileApi()
+        .then((freshUser) => {
+          if (freshUser) {
+            setCurrentUser(freshUser);
+            setUser(freshUser);
+          }
+        })
+        .catch(() => {});
     } else {
       // Route protection: If unauthenticated, clear any protected route hash and enforce login
       if (window.location.hash) {
@@ -67,7 +76,21 @@ export const App: React.FC = () => {
 
     const verifySession = async () => {
       try {
-        await getMyProfileApi();
+        const freshUser = await getMyProfileApi();
+        if (freshUser) {
+          setCurrentUser((prev) => {
+            if (
+              !prev ||
+              prev.name !== freshUser.name ||
+              prev.avatar_url !== freshUser.avatar_url ||
+              prev.email !== freshUser.email
+            ) {
+              setUser(freshUser);
+              return freshUser;
+            }
+            return prev;
+          });
+        }
       } catch {
         // Lỗi 401/403 đã được tự động xử lý trong handleResponse (api.ts) và phát sự kiện fintrack:auth-expired
       }
@@ -118,7 +141,13 @@ export const App: React.FC = () => {
   // If authenticated, navigate based on Role with strict protection (Section 10, 11)
   if (currentUser) {
     if (currentUser.role === "super_admin" || currentUser.role === "admin") {
-      return <AdminDashboard user={currentUser} onLogout={handleLogout} />;
+      return (
+        <AdminDashboard
+          user={currentUser}
+          onLogout={handleLogout}
+          onUserUpdate={handleUserUpdate}
+        />
+      );
     }
     if (currentUser.role === "user") {
       // Phase 1: User Layout & User Navigation

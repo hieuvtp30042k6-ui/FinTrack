@@ -3,6 +3,10 @@
 -- Mục 8, 9, 11, 20: Dữ liệu khởi tạo chuẩn cho Expense Tracker
 -- Mật khẩu mặc định: Password@123
 -- Hash Bcrypt: $2b$12$aU32DZTFMiYyakHlFu.zTOznteK/1EDzNT8taTiNE7ch.4CFLhm12
+--
+-- LƯU Ý: Schema do Alembic (backend/alembic) quản lý duy nhất.
+-- File này được backend tự chạy SAU khi migrate, chỉ khi bảng users còn trống
+-- (xem seed_sample_data() trong backend/app/main.py). Chỉ dành cho PostgreSQL.
 -- ==============================================================================
 
 -- 1. Người dùng mẫu (3 vai trò: super_admin, admin, user)
@@ -32,31 +36,31 @@ INSERT INTO categories (id, user_id, name, type, icon, description) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. Ví tiền mẫu (Gắn với người dùng Nguyễn Văn A - id: 3)
-INSERT INTO wallets (id, user_id, name, balance, currency, icon, color, is_default) VALUES
-(1, 3, 'Tiền mặt', 2500000.00, 'VND', 'payments', '#10B981', TRUE),
-(2, 3, 'Ngân hàng Vietcombank', 18500000.00, 'VND', 'account_balance', '#3B82F6', FALSE),
-(3, 3, 'Ví điện tử MoMo', 1200000.00, 'VND', 'account_balance_wallet', '#EC4899', FALSE)
+INSERT INTO wallets (id, user_id, name, balance, currency) VALUES
+(1, 3, 'Tiền mặt', 2500000.00, 'VND'),
+(2, 3, 'Ngân hàng Vietcombank', 18500000.00, 'VND'),
+(3, 3, 'Ví điện tử MoMo', 1200000.00, 'VND')
 ON CONFLICT (id) DO NOTHING;
 
 -- 4. Giao dịch mẫu (Transactions của người dùng Nguyễn Văn A - id: 3)
 INSERT INTO transactions (id, user_id, category_id, wallet_id, type, amount, description, transaction_date) VALUES
-(1, 3, 8, 2, 'INCOME', 20000000.00, 'Lương tháng 09/2026', CURRENT_TIMESTAMP - INTERVAL '5 days'),
-(2, 3, 1, 1, 'EXPENSE', 150000.00, 'Ăn trưa văn phòng', CURRENT_TIMESTAMP - INTERVAL '3 days'),
-(3, 3, 4, 3, 'EXPENSE', 200000.00, 'Thanh toán cước điện thoại', CURRENT_TIMESTAMP - INTERVAL '2 days'),
-(4, 3, 2, 2, 'EXPENSE', 450000.00, 'Mua đồ dùng cá nhân', CURRENT_TIMESTAMP - INTERVAL '1 day')
+(1, 3, 8, 2, 'INCOME', 20000000.00, 'Lương tháng 09/2026', CURRENT_DATE - 5),
+(2, 3, 1, 1, 'EXPENSE', 150000.00, 'Ăn trưa văn phòng', CURRENT_DATE - 3),
+(3, 3, 4, 3, 'EXPENSE', 200000.00, 'Thanh toán cước điện thoại', CURRENT_DATE - 2),
+(4, 3, 2, 2, 'EXPENSE', 450000.00, 'Mua đồ dùng cá nhân', CURRENT_DATE - 1)
 ON CONFLICT (id) DO NOTHING;
 
 -- 5. Ngân sách mẫu (F04: Quản lý ngân sách - Mục 10)
-INSERT INTO budgets (id, user_id, category_id, amount, period, start_date, end_date) VALUES
-(1, 3, 1, 3000000.00, 'MONTHLY', CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE + INTERVAL '20 days'),
-(2, 3, 2, 1500000.00, 'MONTHLY', CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE + INTERVAL '20 days')
+INSERT INTO budgets (id, user_id, category_id, amount, start_date, end_date) VALUES
+(1, 3, 1, 3000000.00, CURRENT_DATE - 10, CURRENT_DATE + 20),
+(2, 3, 2, 1500000.00, CURRENT_DATE - 10, CURRENT_DATE + 20)
 ON CONFLICT (id) DO NOTHING;
 
 -- 6. Nhật ký kiểm toán mẫu (Audit Logs)
-INSERT INTO audit_logs (user_id, action, entity, entity_id, details, ip_address) VALUES
-(1, 'LOGIN', 'auth', 1, 'Đăng nhập hệ thống Super Admin thành công', '127.0.0.1'),
-(3, 'CREATE', 'transaction', 1, 'Tạo giao dịch thu nhập Lương tháng', '192.168.1.10'),
-(3, 'CREATE', 'transaction', 2, 'Tạo khoản chi Ăn uống', '192.168.1.10');
+INSERT INTO audit_logs (user_id, action, entity, entity_id, details, ip_address, created_at) VALUES
+(1, 'LOGIN', 'auth', 1, 'Đăng nhập hệ thống Super Admin thành công', '127.0.0.1', CURRENT_TIMESTAMP),
+(3, 'CREATE', 'transaction', 1, 'Tạo giao dịch thu nhập Lương tháng', '192.168.1.10', CURRENT_TIMESTAMP),
+(3, 'CREATE', 'transaction', 2, 'Tạo khoản chi Ăn uống', '192.168.1.10', CURRENT_TIMESTAMP);
 
 -- 7. Reset Sequence Postgres
 SELECT setval(pg_get_serial_sequence('users', 'id'), coalesce(max(id), 1)) FROM users;

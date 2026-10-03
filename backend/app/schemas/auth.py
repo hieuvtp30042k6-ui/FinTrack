@@ -49,6 +49,7 @@ class UserResponse(BaseModel):
     email: str
     role: str
     status: str
+    avatar_url: Optional[str] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

@@ -120,22 +120,22 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center">
               <span className="material-symbols-outlined text-[18px]">
                 {isEdit ? "edit" : "savings"}
               </span>
             </div>
-            <h3 className="font-display font-bold text-slate-900 text-base">
+            <h3 className="font-display font-bold text-slate-900 dark:text-white text-base">
               {isEdit ? t("budgets.modal_title_edit", "Chỉnh sửa ngân sách") : t("budgets.modal_title_new", "Thiết lập ngân sách mới")}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -143,7 +143,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
 
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           {error && (
-            <div className="flex items-start gap-2 bg-rose-50 text-rose-700 text-xs px-3.5 py-2.5 rounded-xl border border-rose-200">
+            <div className="flex items-start gap-2 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900">
               <span className="material-symbols-outlined text-[16px] shrink-0 mt-0.5">
                 error
               </span>
@@ -153,13 +153,13 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
 
           {/* Danh mục */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               {t("budgets.modal_category", "Danh mục chi tiêu")}
             </label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all cursor-pointer"
+              className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-indigo-500 transition-all cursor-pointer"
             >
               <option value="">{t("budgets.all_categories_general", "Tất cả danh mục (Ngân sách chung)")}</option>
               {categories.map((c) => (
@@ -168,14 +168,14 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
               {t("budgets.modal_category_hint", "Chọn danh mục cụ thể hoặc để trống để quản lý tổng mức chi tiêu.")}
             </p>
           </div>
 
           {/* Hạn mức số tiền */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               {t("budgets.modal_limit", "Hạn mức ngân sách (VNĐ)")} <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
@@ -187,9 +187,9 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
                   setAmountStr(val);
                 }}
                 placeholder={t("budgets.modal_limit_placeholder", "Ví dụ: 3.000.000")}
-                className="w-full border border-slate-200 rounded-xl pl-3 pr-10 py-2.5 text-sm font-semibold text-slate-900 placeholder-slate-400 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+                className="w-full border border-slate-200 dark:border-slate-700 rounded-xl pl-3 pr-10 py-2.5 text-sm font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-indigo-500 transition-all"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 dark:text-slate-500">
                 đ
               </span>
             </div>
@@ -198,13 +198,13 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
           {/* Chu kỳ thời gian */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-slate-700">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 {t("budgets.modal_period", "Chu kỳ áp dụng")}
               </label>
               <button
                 type="button"
                 onClick={() => setIsCustomRange(!isCustomRange)}
-                className="text-[11px] text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer"
+                className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium cursor-pointer"
               >
                 {isCustomRange ? t("budgets.modal_auto_month", "Dùng chu kỳ tháng này") : t("budgets.modal_custom_date", "Tùy chỉnh ngày")}
               </button>
@@ -213,27 +213,27 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
             {isCustomRange ? (
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <span className="block text-[11px] text-slate-400 mb-1">{t("expenses.table_date", "Từ ngày")}</span>
+                  <span className="block text-[11px] text-slate-400 dark:text-slate-500 mb-1">{t("expenses.table_date", "Từ ngày")}</span>
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-indigo-500"
                   />
                 </div>
                 <div>
-                  <span className="block text-[11px] text-slate-400 mb-1">{t("expenses.table_date", "Đến ngày")}</span>
+                  <span className="block text-[11px] text-slate-400 dark:text-slate-500 mb-1">{t("expenses.table_date", "Đến ngày")}</span>
                   <input
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    className="w-full border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-indigo-500"
                   />
                 </div>
               </div>
             ) : (
-              <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs text-slate-600 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[16px] text-slate-400">
+              <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-600 dark:text-slate-300 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500">
                   calendar_today
                 </span>
                 <span>{t("budgets.modal_auto_month", "Tự động áp dụng cho Tháng hiện tại")}</span>
@@ -242,18 +242,18 @@ const BudgetModal: React.FC<BudgetModalProps> = ({
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer"
             >
               {t("action.cancel", "Hủy")}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-xl transition-all shadow-sm cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-xs font-medium rounded-xl transition-all shadow-sm cursor-pointer disabled:opacity-50"
             >
               {loading && (
                 <span className="material-symbols-outlined text-[14px] animate-spin">
@@ -300,24 +300,24 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-        <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 w-full max-w-sm overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4">
           <span className="material-symbols-outlined text-[22px]">delete</span>
         </div>
-        <h3 className="font-display font-bold text-slate-900 text-base mb-1.5">
+        <h3 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1.5">
           Xóa ngân sách?
         </h3>
-        <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
           Bạn có chắc chắn muốn xóa ngân sách{" "}
-          <strong className="text-slate-700">
+          <strong className="text-slate-700 dark:text-slate-200">
             {budget.category_name || "Tất cả danh mục"}
           </strong>{" "}
           với định mức <strong>{fmt(budget.amount)} đ</strong>? Thao tác này không thể hoàn tác.
         </p>
 
         {error && (
-          <div className="mb-4 text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-xl p-2.5">
+          <div className="mb-4 text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-xl p-2.5">
             {error}
           </div>
         )}
@@ -326,7 +326,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all cursor-pointer"
+            className="px-3.5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer"
           >
             Hủy
           </button>
@@ -416,12 +416,12 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
         <div>
-          <h2 className="font-display text-lg font-bold text-slate-900">
+          <h2 className="font-display text-lg font-bold text-slate-900 dark:text-white">
             {t("budgets.title", "Quản Lý Ngân Sách Chi Tiêu")}
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             {t("budgets.subtitle", "Thiết lập định mức chi tiêu theo tháng để kiểm soát dòng tiền thông minh.")}
           </p>
         </div>
@@ -433,7 +433,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
               setEditingBudget(null);
               setModalOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px]">add</span>
             <span>{t("budgets.add_btn", "Đặt ngân sách mới")}</span>
@@ -443,7 +443,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
       {/* Error state */}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-400 text-xs flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">error</span>
             <span>{error}</span>
@@ -459,8 +459,8 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
       {/* Loading state */}
       {loading ? (
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center text-slate-400 text-xs">
-          <span className="material-symbols-outlined text-[32px] animate-spin text-slate-400 mb-2 block">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-12 text-center text-slate-400 dark:text-slate-500 text-xs">
+          <span className="material-symbols-outlined text-[32px] animate-spin text-slate-400 dark:text-slate-500 mb-2 block">
             progress_activity
           </span>
           {t("categories.loading", "Đang tải dữ liệu ngân sách...")}
@@ -470,49 +470,49 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
           {/* 3 Summary KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* 1. TỔNG ĐỊNH MỨC */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs hover:shadow-md transition-shadow cursor-default">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-md transition-all cursor-default">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {t("budgets.total_budget", "TỔNG ĐỊNH MỨC")}
               </p>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+                <span className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
                   {fmt(totalBudget)}
                 </span>
-                <span className="text-sm font-bold text-slate-700">đ</span>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">đ</span>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                 {t("budgets.month_budget", "Hạn mức tháng")} {generalBudget?.start_date?.slice(0, 7) || "hiện tại"}
               </p>
             </div>
 
             {/* 2. ĐÃ CHI TIÊU */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs hover:shadow-md transition-shadow cursor-default">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-md transition-all cursor-default">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {t("budgets.total_spent", "ĐÃ CHI TIÊU")}
               </p>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-rose-600">
+                <span className="font-display text-2xl sm:text-3xl font-bold text-rose-600 dark:text-rose-400">
                   {fmt(totalSpent)}
                 </span>
-                <span className="text-sm font-bold text-rose-500">đ</span>
+                <span className="text-sm font-bold text-rose-500 dark:text-rose-400">đ</span>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                 {t("budgets.reached", "Đạt")} {overallPercent}% {t("budgets.percent_of_total", "tổng hạn mức")}
               </p>
             </div>
 
             {/* 3. CÒN LẠI KHẢ DỤNG */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs hover:shadow-md transition-shadow cursor-default">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-md transition-all cursor-default">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {t("budgets.remaining_available", "CÒN LẠI KHẢ DỤNG")}
               </p>
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="font-display text-2xl sm:text-3xl font-bold text-emerald-600">
+                <span className="font-display text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                   {fmt(totalRemaining)}
                 </span>
-                <span className="text-sm font-bold text-emerald-500">đ</span>
+                <span className="text-sm font-bold text-emerald-500 dark:text-emerald-400">đ</span>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
                 {t("budgets.to_spend_in_cycle", "Để chi tiêu trong chu kỳ")}
               </p>
             </div>
@@ -520,12 +520,12 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
 
           {/* Grid of Budget Cards */}
           {sortedBudgets.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center">
-              <span className="material-symbols-outlined text-4xl text-slate-300 mb-2 block">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-12 text-center">
+              <span className="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600 mb-2 block">
                 account_balance_wallet
               </span>
-              <p className="text-sm font-semibold text-slate-700">Chưa có ngân sách nào được thiết lập</p>
-              <p className="text-xs text-slate-400 mt-1 mb-4">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Chưa có ngân sách nào được thiết lập</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 mb-4">
                 Hãy bắt đầu bằng việc đặt định mức chi tiêu chung hoặc cho từng danh mục để kiểm soát tài chính.
               </p>
               <button
@@ -534,7 +534,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                   setEditingBudget(null);
                   setModalOpen(true);
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[16px]">add</span>
                 <span>Đặt ngân sách ngay</span>
@@ -549,16 +549,16 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                 const isExceeded = item.status === "exceeded" || percent > 100;
                 const isWarning = item.status === "warning" || (percent >= 80 && percent <= 100);
 
-                let badgeClass = "bg-emerald-50 text-emerald-700 border-emerald-200/60";
+                let badgeClass = "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200/60 dark:border-emerald-800/60";
                 let badgeText = `${t("budgets.safe", "An toàn")} (${percent}%)`;
                 let barColor = "bg-emerald-500";
 
                 if (isExceeded) {
-                  badgeClass = "bg-rose-50 text-rose-700 border-rose-200/60";
+                  badgeClass = "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border-rose-200/60 dark:border-rose-800/60";
                   badgeText = `${t("budgets.exceeded", "Vượt")} ${percent}%`;
                   barColor = "bg-rose-500";
                 } else if (isWarning) {
-                  badgeClass = "bg-amber-50 text-amber-700 border-amber-200/60";
+                  badgeClass = "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border-amber-200/60 dark:border-amber-800/60";
                   badgeText = `${t("budgets.warning", "Cảnh báo")} (${percent}%)`;
                   barColor = "bg-amber-500";
                 }
@@ -566,10 +566,10 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                 return (
                   <div
                     key={item.id}
-                    className={`bg-white rounded-2xl border p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group ${
+                    className={`bg-white dark:bg-slate-900 rounded-2xl border p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group ${
                       isGeneral
-                        ? "border-slate-300 ring-2 ring-slate-900/5 relative"
-                        : "border-slate-200/80"
+                        ? "border-slate-300 dark:border-slate-700 ring-2 ring-slate-900/5 dark:ring-indigo-500/10 relative"
+                        : "border-slate-200/80 dark:border-slate-800"
                     }`}
                   >
                     <div>
@@ -579,8 +579,8 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                           <div
                             className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-2xs ${
                               isGeneral
-                                ? "bg-slate-900 text-white"
-                                : "bg-slate-100 text-slate-700"
+                                ? "bg-slate-900 dark:bg-indigo-600 text-white"
+                                : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
                             }`}
                           >
                             <span className="material-symbols-outlined text-[20px]">
@@ -589,16 +589,16 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                           </div>
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-bold text-sm text-slate-900 truncate">
+                              <span className="font-bold text-sm text-slate-900 dark:text-white truncate">
                                 {isGeneral ? t("budgets.all_categories_label", "Tất cả danh mục") : (item.category_name || item.category || "Danh mục")}
                               </span>
                               {isGeneral && (
-                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shrink-0">
                                   {t("budgets.general", "Chung")}
                                 </span>
                               )}
                             </div>
-                            <span className="text-[11px] text-slate-400">
+                            <span className="text-[11px] text-slate-400 dark:text-slate-500">
                               {item.start_date} → {item.end_date}
                             </span>
                           </div>
@@ -616,26 +616,26 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                         {/* Hàng chỉ số: Hạn mức đặt ra và Số tiền đã chi đối xứng nhau */}
                         <div className="flex items-baseline justify-between pt-1">
                           <div>
-                            <span className="text-[11px] font-semibold text-slate-400 block mb-0.5">
+                            <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 block mb-0.5">
                               {t("budgets.limit_set", "Hạn mức đặt ra")}
                             </span>
-                            <span className="font-display text-lg font-bold text-slate-900">
-                              {fmt(item.amount)} <span className="text-xs font-semibold text-slate-500">đ</span>
+                            <span className="font-display text-lg font-bold text-slate-900 dark:text-white">
+                              {fmt(item.amount)} <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">đ</span>
                             </span>
                           </div>
 
                           <div className="text-right">
-                            <span className="text-[11px] font-semibold text-slate-400 block mb-0.5">
+                            <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 block mb-0.5">
                               {t("budgets.spent_amount", "Đã chi")} ({percent}%)
                             </span>
-                            <span className="font-display text-base font-bold text-rose-600">
-                              {fmt(item.spent)} <span className="text-xs font-semibold text-rose-500">đ</span>
+                            <span className="font-display text-base font-bold text-rose-600 dark:text-rose-400">
+                              {fmt(item.spent)} <span className="text-xs font-semibold text-rose-500 dark:text-rose-400">đ</span>
                             </span>
                           </div>
                         </div>
 
                         {/* Thanh tiến độ chi tiêu */}
-                        <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                        <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-300 ${barColor}`}
                             style={{ width: `${Math.min(100, percent)}%` }}
@@ -645,14 +645,14 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                     </div>
 
                     {/* Footer thẻ */}
-                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                      <span className="text-[11px] text-slate-500">
+                    <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400">
                         {t("budgets.remaining_label", "Còn lại:")}{" "}
                         <strong
                           className={`font-bold ${
                             remaining === 0 && isExceeded
-                              ? "text-rose-600"
-                              : "text-emerald-600"
+                              ? "text-rose-600 dark:text-rose-400"
+                              : "text-emerald-600 dark:text-emerald-400"
                           }`}
                         >
                           {fmt(remaining)} đ
@@ -666,7 +666,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                             setEditingBudget(item);
                             setModalOpen(true);
                           }}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer"
                           title="Chỉnh sửa ngân sách"
                         >
                           <span className="material-symbols-outlined text-[15px]">edit</span>
@@ -674,7 +674,7 @@ export const BudgetsView: React.FC<BudgetsViewProps> = ({
                         <button
                           type="button"
                           onClick={() => setDeletingBudget(item)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
                           title="Xóa ngân sách"
                         >
                           <span className="material-symbols-outlined text-[15px]">delete</span>
